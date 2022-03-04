@@ -13,7 +13,7 @@ host.
 ```console
 ❯ GOOS=windows go build -o rich-presence main.go
 ❯ DISCORD_APP_ID=942604338927374438 WSLENV=DISCORD_APP_ID/w ./rich-presence.exe
-❯ echo '{"state":"hello"}' | nc -uw0 "$WSL_HOST" 1992
+❯ jq -cM . example.json | nc -uw1 "$WSL_HOST" 1992
 ```
 
 ### Linux
