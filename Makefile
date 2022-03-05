@@ -20,7 +20,7 @@ $(bin): main.go
 	go build -o $(bin) $<
 
 run: $(bin)
-	./$(bin)
+	./$(bin) -verbose
 
 clean:
 	rm -rf $(bin)
