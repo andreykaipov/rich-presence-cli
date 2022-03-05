@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"log"
 	"net"
 	"os"
@@ -11,11 +12,19 @@ import (
 )
 
 func main() {
-	if err := client.Login(os.Getenv("DISCORD_APP_ID")); err != nil {
+	bind := flag.String("bind", ":1992", "Address and port to bind to")
+	flag.Parse()
+
+	appid := os.Getenv("DISCORD_APP_ID")
+	if appid == "" {
+		log.Fatal("DISCORD_APP_ID is empty")
+	}
+
+	if err := client.Login(appid); err != nil {
 		log.Fatal(err)
 	}
 
-	log.Fatal(serve("0.0.0.0:1992"))
+	log.Fatal(serve(*bind))
 }
 
 func serve(address string) error {
