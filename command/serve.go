@@ -58,7 +58,7 @@ func (c *Serve) start() error {
 }
 
 type AugmentedActivity struct {
-	*client.Activity
+	client.Activity
 	Since string
 }
 
@@ -67,9 +67,9 @@ func (c *Serve) handle(msg []byte) error {
 		log.Printf("%s", msg)
 	}
 
-	activity := &AugmentedActivity{}
+	activity := AugmentedActivity{}
 
-	if err := json.Unmarshal(msg, activity); err != nil {
+	if err := json.Unmarshal(msg, &activity); err != nil {
 		return err
 	}
 
@@ -91,5 +91,5 @@ func (c *Serve) handle(msg []byte) error {
 		activity.Timestamps = &client.Timestamps{Start: &t}
 	}
 
-	return client.SetActivity(*activity.Activity)
+	return client.SetActivity(activity.Activity)
 }

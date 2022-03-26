@@ -39,7 +39,7 @@ func (c *Update) AfterApply(ctx *kong.Context) error {
 	}
 
 	activity := &AugmentedActivity{
-		Activity: &discord.Activity{
+		Activity: discord.Activity{
 			Details:    c.Details,
 			State:      c.State,
 			LargeImage: c.LargeImage,
