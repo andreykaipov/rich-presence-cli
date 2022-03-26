@@ -1,0 +1,17 @@
+---
+# server config
+app_id: 942604338927374438
+bind: :1992
+verbose: true
+
+# client config
+server: envexpand:$WINHOST:1992
+details: Default Details
+state: Default State
+large_image: terminal
+large_text: Terminal
+small_image:
+small_text:
+buttons:
+  GitHub: https://github.com
+since: now # options are now, never, or seconds since unix epoch
