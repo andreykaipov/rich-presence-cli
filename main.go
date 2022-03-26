@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -17,6 +18,7 @@ var cli struct {
 }
 
 func main() {
+	home := os.Getenv("HOME") // WSL workaround; invoke with WSLENV=HOME/w
 
 	ctx := kong.Parse(
 		&cli,
@@ -25,8 +27,8 @@ func main() {
 		kong.Configuration(
 			yamlEnvResolver,
 			"rich-presence.yml",
-			"~/.config/rich-presence/rich-presence.yml",
-			"~/.rich-presence.yml",
+			fmt.Sprintf("%s/.rich-presence.yml", home),
+			fmt.Sprintf("%s/.config/rich-presence/rich-presence.yml", home),
 		),
 		kong.ConfigureHelp(kong.HelpOptions{Compact: true}),
 	)
