@@ -1,5 +1,5 @@
-These are just some miscellaneous notes for myself (or whoever else reads
-this) about running this on Windows within WSL.
+These are some miscellaneous notes for myself (or whoever else reads this) about
+running this on Windows within WSL.
 
 - Assuming Discord is running on the Windows host, and not within WSL, we
   also need to run our server on the Windows host so the underying

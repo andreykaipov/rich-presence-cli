@@ -1,10 +1,10 @@
-## rich-presence-udp
+## rich-presence-cli
 
-It's a UDP proxy server that allows you to update your Discord Rich Presence.
+Manage your Discord Rich Presence from the command line over UDP.
 
 ## usage
 
-Run it:
+Start a UDP proxy to the Discord IPC pipe:
 
 ```console
 ❯ make serve
@@ -19,14 +19,14 @@ In another shell, send an update:
 ❯ ./rich-presence.exe update --details "$(basename "$PWD")" --state browsing...
 ```
 
-In the above snippets, I'm running on Windows via WSL (hence the `.exe` suffix),
-but it should work just fine on desktop Linux too.
-
-We can also just form the JSON payload ourselves:
+We can also form the JSON payloads ourselves:
 
 ```console
 ❯ echo '{"details":"wassup"}' > /dev/udp/$WINHOST/1992
 ```
+
+In the above snippets, I'm running on Windows via WSL (hence the `.exe` suffix),
+but it should work just fine on desktop Linux too.
 
 ### additional configuration
 
@@ -43,3 +43,9 @@ for this file are as follows:
 Go crazy:
 
 ![todo gif](./example.gif)
+
+## rationale
+
+Why a proxy? Because initial connection to the Discord IPC pipe is slow and the
+UX is unfriendly. Plus, if running on WSL, you kind of need some sort of proxy
+to interface with Windows named pipes (see [`WSL.md`](./WSL.md) for more notes).
