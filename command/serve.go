@@ -12,13 +12,13 @@ import (
 )
 
 type Serve struct {
-	AppID   string `required:"" env:"DISCORD_APP_ID" help:"The Discord Application/Client ID you'd like to use"`
+	AppID   int    `required:"" env:"DISCORD_APP_ID" help:"The Discord Application/Client ID you'd like to use"`
 	Bind    string `default:":1992" help:"Address and port to bind to"`
 	Verbose bool   `default:"false" help:"Log each message handled"`
 }
 
 func (c *Serve) Run() error {
-	if err := client.Login(c.AppID); err != nil {
+	if err := client.Login(strconv.Itoa(c.AppID)); err != nil {
 		return err
 	}
 
