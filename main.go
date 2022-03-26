@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"github.com/andreykaipov/rich-presence-udp/command"
+	"github.com/andreykaipov/rich-presence-cli/command"
 	"github.com/goccy/go-yaml"
 )
 
@@ -22,8 +22,8 @@ func main() {
 
 	ctx := kong.Parse(
 		&cli,
-		kong.Name("rich-presence-udp"),
-		kong.Description("Manage your Discord Rich Presence via UDP"),
+		kong.Name("rich-presence"),
+		kong.Description("Manage your Discord Rich Presence from the command line"),
 		kong.Configuration(
 			yamlEnvResolver,
 			"rich-presence.yml",

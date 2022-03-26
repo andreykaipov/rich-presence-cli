@@ -7,7 +7,6 @@ bin := rich-presence
 ifdef WSL_DISTRO_NAME
 export GOOS := windows
 bin := $(bin).exe
-WSLENV := DISCORD_APP_ID/w
 endif
 
 .PHONY: build
@@ -18,7 +17,7 @@ $(bin): $(shell find . -name '*.go')
 	go build -o $(bin) main.go
 
 serve: $(bin)
-	./$(bin) serve --verbose
+	./$(bin) serve
 
 clean:
 	rm -rf $(bin)
