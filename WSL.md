@@ -13,10 +13,10 @@ this) about running this on Windows within WSL.
   ```
 
 - Since we're invoking a Windows executable from within WSL, we must also tell
-  WSL to share with Windows any env vars we've set using
-  `WSLENV=DISCORD_APP_ID/w` (see [this blog
+  WSL to share with Windows any env vars we've set via
+  `WSLENV=DISCORD_APP_ID/w:HOME/w`. See [this blog
   post](https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows/)
-  for more details).
+  for more details.
 
 - After invoking the executable for the first time, we'll have to accept the
   Windows Firewall security alert to allow inbound UDP traffic to our Windows
