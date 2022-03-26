@@ -2,8 +2,6 @@ usage:
 	@echo "Please specify a task:"
 	@awk -F: '/^[^\t#.$$]+:[^=]+?$$/ {print "-",$$1}' Makefile
 
-export DISCORD_APP_ID := 942604338927374438
-
 bin := rich-presence
 
 ifdef WSL_DISTRO_NAME
@@ -16,11 +14,11 @@ endif
 
 build: $(bin)
 
-$(bin): main.go
-	go build -o $(bin) $<
+$(bin): $(shell find . -name '*.go')
+	go build -o $(bin) main.go
 
-run: $(bin)
-	./$(bin) -verbose
+serve: $(bin)
+	./$(bin) serve --verbose
 
 clean:
 	rm -rf $(bin)
