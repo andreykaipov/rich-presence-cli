@@ -5,18 +5,19 @@ import (
 	"encoding/json"
 	"log"
 	"net"
+	"strconv"
+	"time"
 
-	"github.com/alecthomas/kong"
 	"github.com/hugolgst/rich-go/client"
 )
 
 type Serve struct {
-	AppID   string `env:"DISCORD_APP_ID" help:"The Discord Application/Client ID you'd like to use"`
+	AppID   string `required:"" env:"DISCORD_APP_ID" help:"The Discord Application/Client ID you'd like to use"`
 	Bind    string `default:":1992" help:"Address and port to bind to"`
 	Verbose bool   `default:"false" help:"Log each message handled"`
 }
 
-func (c *Serve) Run(ctx *kong.Context) error {
+func (c *Serve) Run() error {
 	if err := client.Login(c.AppID); err != nil {
 		return err
 	}
@@ -47,7 +48,7 @@ func (c *Serve) start() error {
 			msg := bytes.TrimRight(buffer[:n], "\n")
 
 			if err := c.handle(msg); err != nil {
-				log.Printf("Error handling message %s. Ignoring...", msg)
+				log.Printf("error handling message: %s", err)
 				continue
 			}
 		}
@@ -56,16 +57,39 @@ func (c *Serve) start() error {
 	return <-done
 }
 
+type AugmentedActivity struct {
+	*client.Activity
+	Since string
+}
+
 func (c *Serve) handle(msg []byte) error {
 	if c.Verbose {
 		log.Printf("%s", msg)
 	}
 
-	activity := &client.Activity{}
+	activity := &AugmentedActivity{}
 
 	if err := json.Unmarshal(msg, activity); err != nil {
 		return err
 	}
 
-	return client.SetActivity(*activity)
+	switch since := activity.Since; since {
+	case "":
+	case "never":
+	case "now":
+		t := time.Now().Add(-1 * time.Second)
+		activity.Timestamps = &client.Timestamps{Start: &t}
+	default:
+		secs, err := strconv.ParseInt(since, 10, 64)
+		if err != nil {
+			log.Printf("since: unparsable as int64; defaulting to never")
+			activity.Timestamps = nil
+			break
+		}
+
+		t := time.Unix(secs, 0)
+		activity.Timestamps = &client.Timestamps{Start: &t}
+	}
+
+	return client.SetActivity(*activity.Activity)
 }
