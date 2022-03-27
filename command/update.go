@@ -10,16 +10,18 @@ import (
 )
 
 type Update struct {
-	Server     string            `default:":1992" help:"Address and port of the server"`
-	Details    string            `help:"First line of your presence"`
-	State      string            `help:"Second line of your presence"`
-	LargeImage string            `help:"ID of the large asset for the activity"`
-	LargeText  string            `help:"Text displayed when hovering over the large image"`
-	SmallImage string            `help:"ID of the small asset for the activity"`
-	SmallText  string            `help:"Text displayed when hovering over the small image"`
-	Buttons    map[string]string `help:"Any buttons you might want, e.g. label=url"`
-	Since      string            `default:"never" placeholder:"now|never|<seconds-since-epoch>" help:"Time since the activity began"`
-	Dry        DryFlag           `help:"Dry run (prints the JSON payload to stdout)"`
+	Server          string            `default:":1992" help:"Address and port of the server"`
+	Details         string            `help:"First line of your presence"`
+	State           string            `help:"Second line of your presence"`
+	LargeImage      string            `help:"ID of the large asset for the activity"`
+	LargeText       string            `help:"Text displayed when hovering over the large image"`
+	SmallImage      string            `help:"ID of the small asset for the activity"`
+	SmallText       string            `help:"Text displayed when hovering over the small image"`
+	Buttons         map[string]string `help:"Any buttons you might want, e.g. label=url"`
+	Since           string            `default:"never" placeholder:"never|now|cached|<seconds-since-epoch>" help:"Time since the activity began"`
+	SinceCacheKey   string            `help:"Key to reference an existing 'since' value from a past activity update"`
+	SinceCacheWrite bool              `help:"Whether to write the 'since' value to the server cache, based on the given key"`
+	Dry             DryFlag           `help:"Dry run (prints the JSON payload to stdout)"`
 }
 
 type DryFlag string
@@ -48,7 +50,9 @@ func (c *Update) AfterApply(ctx *kong.Context) error {
 			SmallText:  c.SmallText,
 			Buttons:    buttons,
 		},
-		Since: c.Since,
+		Since:           c.Since,
+		SinceCacheKey:   c.SinceCacheKey,
+		SinceCacheWrite: c.SinceCacheWrite,
 	}
 
 	bytes, err := json.Marshal(activity)

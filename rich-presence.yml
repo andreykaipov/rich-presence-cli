@@ -14,4 +14,6 @@ small_image:
 small_text:
 buttons:
   GitHub: https://github.com
-since: now # options are now, never, or seconds since unix epoch
+since: now # must be one of now|never|from-cache|<seconds-since-epoch>
+since_cache_key: blahblahblah
+since_cache_write: false

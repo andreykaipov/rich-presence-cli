@@ -12,9 +12,15 @@ import (
 )
 
 type Serve struct {
-	AppID   int    `required:"" env:"DISCORD_APP_ID" help:"The Discord Application/Client ID you'd like to use"`
-	Bind    string `default:":1992" help:"Address and port to bind to"`
-	Verbose bool   `default:"false" help:"Log each message handled"`
+	AppID      int    `required:"" env:"DISCORD_APP_ID" help:"The Discord Application/Client ID you'd like to use"`
+	Bind       string `default:":1992" help:"Address and port to bind to"`
+	Verbose    bool   `default:"false" help:"Log each message handled"`
+	sinceCache map[string]time.Time
+}
+
+func (c *Serve) BeforeApply() error {
+	c.sinceCache = map[string]time.Time{}
+	return nil
 }
 
 func (c *Serve) Run() error {
@@ -59,7 +65,9 @@ func (c *Serve) start() error {
 
 type AugmentedActivity struct {
 	client.Activity
-	Since string
+	Since           string
+	SinceCacheKey   string
+	SinceCacheWrite bool
 }
 
 func (c *Serve) handle(msg []byte) error {
@@ -73,12 +81,18 @@ func (c *Serve) handle(msg []byte) error {
 		return err
 	}
 
+	var t time.Time
+	//fmt.Printf("%#v\n", c.sinceCache)
+
 	switch since := activity.Since; since {
 	case "":
 	case "never":
 	case "now":
-		t := time.Now().Add(-1 * time.Second)
-		activity.Timestamps = &client.Timestamps{Start: &t}
+		t = time.Now().Add(-1 * time.Second)
+	case "cached":
+		if val, ok := c.sinceCache[activity.SinceCacheKey]; ok {
+			t = val
+		}
 	default:
 		secs, err := strconv.ParseInt(since, 10, 64)
 		if err != nil {
@@ -87,8 +101,15 @@ func (c *Serve) handle(msg []byte) error {
 			break
 		}
 
-		t := time.Unix(secs, 0)
+		t = time.Unix(secs, 0)
+	}
+
+	if activity.Since != "never" {
 		activity.Timestamps = &client.Timestamps{Start: &t}
+	}
+
+	if activity.SinceCacheWrite && activity.SinceCacheKey != "" {
+		c.sinceCache[activity.SinceCacheKey] = t
 	}
 
 	return client.SetActivity(activity.Activity)
