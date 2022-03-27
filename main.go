@@ -11,6 +11,8 @@ import (
 	"github.com/goccy/go-yaml"
 )
 
+var version = "0.1.0"
+
 var cli struct {
 	Config kong.ConfigFlag `type:"path" help:"Path to a YAML file with defaults"`
 	Serve  command.Serve   `cmd:"" help:"Start a UDP proxy server for Discord IPC"`
