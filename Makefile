@@ -24,6 +24,10 @@ serve: $(bin)
 clean:
 	rm -rf bin
 
+# release process:
+# 1. update version in main.go
+# 2. commit all the changes
+# 3. run this task
 release: clean
 	@for os in linux windows; do\
 		if [ $$os = "windows" ]; then ext=".exe"; fi;\
