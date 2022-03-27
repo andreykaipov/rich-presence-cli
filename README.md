@@ -8,8 +8,8 @@ Start a UDP proxy to the Discord IPC pipe:
 
 ```console
 ❯ make serve
-go build -o rich-presence.exe main.go
-./rich-presence.exe serve --verbose
+go build -o ./bin/rich-presence.exe main.go
+./bin/rich-presence.exe serve
 2022/03/26 17:37:09 Listening on :1992
 ```
 
