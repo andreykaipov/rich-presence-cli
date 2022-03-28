@@ -1,6 +1,8 @@
-## rich-presence-cli
+# rich-presence-cli
 
 Manage your Discord Rich Presence from the command line over UDP.
+
+Here're some wacky things you can do:
 
 ![gif of some wacky things you can do](./demo.gif)
 
@@ -18,7 +20,7 @@ go build -o ./bin/rich-presence.exe main.go
 In another shell, send an update:
 
 ```console
-❯ ./rich-presence.exe update --details "$(basename "$PWD")" --state browsing...
+❯ rich-presence update --details "$(basename "$PWD")" --state browsing...
 ```
 
 We can also form the JSON payloads ourselves:
@@ -30,7 +32,7 @@ We can also form the JSON payloads ourselves:
 In the above snippets, I'm running on Windows via WSL (hence the `.exe` suffix),
 but it should work just fine on desktop Linux too.
 
-### additional configuration
+## configuration
 
 Check out the [`rich-presence.yml`](./rich-presence.yml) configuration file at
 the root of this repo to see everything that's configurable. The search paths
