@@ -18,7 +18,9 @@ type Update struct {
 	SmallImage string            `help:"ID of the small asset for the activity"`
 	SmallText  string            `help:"Text displayed when hovering over the small image"`
 	Buttons    map[string]string `help:"Any buttons you might want, e.g. label=url"`
-	Since      string            `default:"never" placeholder:"now|never|<seconds-since-epoch>" help:"Time since the activity began"`
+	Since      string            `default:"never" placeholder:"now|never|cached|<seconds-since-epoch>" help:"Time since the activity began; defaults to 'never'"`
+	CacheKey   string            `help:"Key to read a previous activity update from the server cache, accessed by setting an arg to 'cached'"`
+	CacheWrite string            `default:"no" placeholder:"no|if_not_present|always" help:"Write the current activity update to the cache with the provided --cache-key according to the provided write strategy; defaults to 'no'"`
 	Dry        DryFlag           `help:"Dry run (prints the JSON payload to stdout)"`
 }
 
@@ -39,7 +41,7 @@ func (c *Update) AfterApply(ctx *kong.Context) error {
 	}
 
 	activity := &AugmentedActivity{
-		Activity: discord.Activity{
+		Activity: &discord.Activity{
 			Details:    c.Details,
 			State:      c.State,
 			LargeImage: c.LargeImage,
@@ -48,7 +50,9 @@ func (c *Update) AfterApply(ctx *kong.Context) error {
 			SmallText:  c.SmallText,
 			Buttons:    buttons,
 		},
-		Since: c.Since,
+		Since:      c.Since,
+		CacheKey:   c.CacheKey,
+		CacheWrite: c.CacheWrite,
 	}
 
 	bytes, err := json.Marshal(activity)
