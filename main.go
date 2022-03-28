@@ -11,7 +11,7 @@ import (
 	"github.com/goccy/go-yaml"
 )
 
-var version = "0.1.0"
+var version = "0.2.0"
 
 var cli struct {
 	Config kong.ConfigFlag `type:"path" help:"Path to a YAML file with defaults"`
