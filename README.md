@@ -2,6 +2,8 @@
 
 Manage your Discord Rich Presence from the command line over UDP.
 
+![gif of some wacky things you can do](./demo.gif)
+
 ## usage
 
 Start a UDP proxy to the Discord IPC pipe:
@@ -37,12 +39,6 @@ for this file are as follows:
 - `rich-presence.yml`
 - `~/.rich-presence.yml`
 - `~/.config/rich-presence/rich-presence.yml`
-
-## example
-
-Go crazy:
-
-![todo gif](./example.gif)
 
 ## rationale
 
